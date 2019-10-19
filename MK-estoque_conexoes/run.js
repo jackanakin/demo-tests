@@ -53,7 +53,7 @@ async function main() {
         matched.push({ codconexao, item_id });
         return;
       }
-      
+
       if (
         unDotted(mac_address) &&
         unDotted(mac_address).includes(item_id.slice(4)) &&
@@ -129,9 +129,9 @@ async function main() {
 
       if (
         onu_serial &&
+        isValid(id_serial_equip) &&
         onu_serial.includes(id_serial_equip.slice(4)) &&
         isValid(onu_serial) &&
-        isValid(id_serial_equip) &&
         id_serial_equip.length > 0
       ) {
         matched.push({ codconexao, item_id });
@@ -186,13 +186,18 @@ async function main() {
       /// END item_id
 
       /// START id_serial_equip
-      if (id_serial_equip.includes(onu_serial) && isValid(onu_serial)) {
+      if (
+        isValid(id_serial_equip) &&
+        id_serial_equip.includes(onu_serial) &&
+        isValid(onu_serial)
+      ) {
         matched.push({ codconexao, item_id });
         return;
       }
 
       if (
-        id_serial_equip.includes(unDotted(mac_address)) ||
+        (isValid(id_serial_equip) &&
+          id_serial_equip.includes(unDotted(mac_address))) ||
         id_serial_equip.includes(subMac(mac_address))
       ) {
         matched.push({ codconexao, item_id });
@@ -201,6 +206,7 @@ async function main() {
 
       if (
         onu_serial &&
+        isValid(id_serial_equip) &&
         id_serial_equip.includes(onu_serial.slice(4)) &&
         isValid(onu_serial)
       ) {
@@ -233,6 +239,7 @@ async function main() {
 function isValid(fieldName) {
   if (fieldName == "ZNTS") return false;
   if (fieldName == "NULL") return false;
+  if (!fieldName) return false;
   return true;
 }
 
